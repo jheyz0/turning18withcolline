@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colline Turns 18 | Seat & Table Checker</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top, #682b3c 0%, transparent 45%),
+        linear-gradient(135deg, #18070d, #2b0d16 55%, #16060b);
+    color: #f8eee8;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 15px;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(221,184,120,0.35);
+    border-radius: 24px;
+    padding: 35px 25px;
+    text-align: center;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.35);
+    backdrop-filter: blur(12px);
+}
+
+.eyebrow {
+    color: #d9b77c;
+    letter-spacing: 4px;
+    font-size: 10px;
+    margin-bottom: 12px;
+}
+
+h1 {
+    font-family: 'Cormorant Garamond', serif;
+    color: #e6c58e;
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.subtitle {
+    color: #e8d8ce;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-top: 10px;
+}
+
+.gold-line {
+    width: 65px;
+    height: 1px;
+    background: #d9b77c;
+    margin: 25px auto;
+}
+
+.screen {
+    display: none;
+    animation: fadeIn .35s ease;
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 27px;
+    color: #e6c58e;
+    margin-bottom: 10px;
+}
+
+.description {
+    font-size: 12px;
+    line-height: 1.7;
+    color: #e8d8ce;
+    margin-bottom: 22px;
+}
+
+.menu-button, .action-button {
+    width: 100%;
+    padding: 15px;
+    margin: 8px 0;
+    border: 1px solid #d9b77c;
+    border-radius: 12px;
+    background: #571d2b;
+    color: #f8eee8;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.menu-button:hover, .action-button:hover {
+    background: #7b3043;
+    transform: translateY(-2px);
+}
+
+.back-button {
+    background: transparent;
+    border: none;
+    color: #d9b77c;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    margin-top: 20px;
+    cursor: pointer;
+    letter-spacing: 1px;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(217,183,124,0.5);
+    border-radius: 10px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    outline: none;
+    margin-bottom: 12px;
+}
+
+input::placeholder {
+    color: #cbb8b0;
+}
+
+.result-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(217,183,124,0.4);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 18px;
+    text-align: left;
+}
+
+.result-label {
+    color: #d9b77c;
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.result-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 25px;
+    color: #f3d9aa;
+    margin-bottom: 15px;
+}
+
+.seat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 45px;
+    color: #e6c58e;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.companion-list {
+    list-style: none;
+    margin-top: 10px;
+}
+
+.companion-list li {
+    font-size: 12px;
+    color: #f1e5dc;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.table-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 55px;
+    text-align: center;
+    color: #e6c58e;
+    margin: 5px 0 15px;
+}
+
+.error-message {
+    color: #f1b8b8;
+    font-size: 12px;
+    margin-top: 15px;
+    line-height: 1.6;
+}
+
+.footer {
+    color: #bda49a;
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-top: 30px;
+}
+
+@media(max-width: 400px) {
+    .container { padding: 28px 18px; }
+    h1 { font-size: 36px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="eyebrow">A CELEBRATION OF A LIFETIME</div>
+    <h1>Colline Turns 18</h1>
+    <div class="subtitle">SEAT & TABLE CHECKER</div>
+    <div class="gold-line"></div>
+
+    <!-- HOME -->
+    <div class="screen active" id="home">
+        <div class="section-title">Welcome, Guest!</div>
+        <p class="description">
+            Find your reserved seats or check your assigned table.
+            Simply enter your name to get started.
+        </p>
+
+        <button class="menu-button" onclick="showScreen('seatSearch')">
+            CHECK MY SEATS
+        </button>
+
+        <button class="menu-button" onclick="showScreen('tableSearch')">
+            FIND MY TABLE
+        </button>
+    </div>
+
+    <!-- SEAT SEARCH -->
+    <div class="screen" id="seatSearch">
+        <div class="section-title">Check My Seats</div>
+        <p class="description">
+            Enter your first name or full name to see your reservation details.
+        </p>
+
+        <input id="seatInput" type="text" placeholder="Enter your name"
+            onkeydown="if(event.key==='Enter') searchSeats()">
+
+        <button class="action-button" onclick="searchSeats()">SEARCH</button>
+
+        <div id="seatResults"></div>
+
+        <button class="back-button" onclick="showScreen('home')">← BACK TO HOME</button>
+    </div>
+
+    <!-- TABLE SEARCH -->
+    <div class="screen" id="tableSearch">
+        <div class="section-title">Find My Table</div>
+        <p class="description">
+            Enter your name to find your assigned table and tablemates.
+        </p>
+
+        <input id="tableInput" type="text" placeholder="Enter your name"
+            onkeydown="if(event.key==='Enter') searchTable()">
+
+        <button class="action-button" onclick="searchTable()">SEARCH</button>
+
+        <div id="tableResults"></div>
+
+        <button class="back-button" onclick="showScreen('home')">← BACK TO HOME</button>
+    </div>
+
+    <div class="footer">THANK YOU FOR CELEBRATING WITH ME</div>
+
+</div>
+
+<script>
+
+// =====================================
+// RESERVATION GROUPS
+// Names without blank lines belong together.
+// "Companion" represents one additional seat.
+// =====================================
+
+const reservationGroups = [
+    { names: ["Vangie Caube", "Cydnie Caube", "Claire Caube"] },
+    { names: ["Beatriz Villere"] },
+    { names: ["Helen Caube", "Joel Caube", "Jeannica Caube", "Jaysean Caube", "Johuary Caube"] },
+    { names: ["Diana Rose Pilac"] },
+
+    { names: ["Seo Villere", "Evangeline Villere", "Mark San Juan"] },
+    { names: ["Denver Villere", "Noli Villere"] },
+    { names: ["Prince Andrei Villere", "Anthony Villere"] },
+
+    { names: ["Marjeilee Fallorin"] },
+    { names: ["Ariana Cruz"] },
+    { names: ["Cheska Maguddayao"] },
+    { names: ["Ayesha Lei Arzadon"] },
+    { names: ["Riene Bengaño"] },
+    { names: ["Lila Parada"] },
+    { names: ["Shine Albert", "Shane Albert"] },
+    { names: ["Queen Recto"] },
+    { names: ["Tiffany Abesar"] },
+    { names: ["Aexel Caasi"] },
+
+    { names: ["Kyle Nicholas Sultan"] },
+    { names: ["Charles Cordero"] },
+    { names: ["Lee Rafael Natividad"] },
+    { names: ["Joemari Barcela"] },
+    { names: ["Nick Divinagracia"] },
+    { names: ["Theodore Aplasca"] },
+    { names: ["Czyquia Maerick Edeza"] },
+    { names: ["Will Enzo Lorenzo"] },
+    { names: ["Daimler Francisco"] },
+    { names: ["Maria Ann Jelaine Pacayra"] },
+
+    { names: ["Reese Mozo"] },
+    { names: ["Jaymaureen Mata"] },
+    { names: ["Saggie Casthmhea"] },
+    { names: ["Rhian Ongtangco"] },
+    { names: ["Princess Airish Argente"] },
+    { names: ["Josshelle May Baranda"] },
+    { names: ["Jona Flores"] },
+    { names: ["Christian Mark Llosala"] },
+    { names: ["Eric Gahoy"] },
+
+    { names: ["Angelo Ernacio", "Shaine Anne Montes Ernacio", "Cianna Jermaine T. Roldan", "Rafael Loresco", "Justin Loresco"] },
+
+    { names: ["Jeffry Abegonia"] },
+    { names: ["Jeffrey Sapinoso"] },
+    { names: ["Ma. Cristina Culanay"] },
+
+    { names: ["Marites Callo"], companions: 1 },
+
+    { names: ["Niome Ballesteros", "Alliah Ballesteros", "Leanne Ballesteros"] },
+    { names: ["Nora Cuadera", "John Lexter Cuadera", "Lorraine Jones V. Cuadera"] },
+    { names: ["Jhylou Masing", "Jhydel Faith D. Masing", "Jhyradel Masing"] },
+    { names: ["Merigyn Cuadera", "Princess Ashly Cuadera", "Dimple"] },
+    { names: ["Nanay Soña", "Shimer Santos"] },
+    { names: ["Erlina Lamberte", "Raya Lamberte"] },
+
+    { names: ["Matet Jacky Lou S. Enolpe", "Danilo Enolpe", "Darah Margarette Enolpe"] },
+
+    { names: ["Laylani Bautista"], companions: 1 },
+    { names: ["Tita Dyanelle"], companions: 1 },
+    { names: ["Johncel Embao"], companions: 1 },
+    { names: ["Lariza Villa Villa Santos", "Juling"], companions: 1 },
+
+    { names: ["Arleen Anuevo"] },
+    { names: ["Jinnes Gamboa"] },
+
+    // ADDED: Independent one-seat reservations
+    { names: ["Rodgie Lyle Margallo"] },
+    { names: ["Stacy Solace"] }
+];
+
+
+// =====================================
+// TABLE ASSIGNMENTS
+// =====================================
+
+const tables = {
+    "Table 1": [
+        "Vangie Caube",
+        "Cydnie Caube",
+        "Claire Caube",
+        "Beatriz Villere",
+        "Helen Caube",
+        "Joel Caube",
+        "Jeannica Caube",
+        "Jaysean Caube",
+        "Johuary Caube",
+        "Diana Rose Pilac"
+    ],
+
+    "Table 2": [
+        "Seo Villere",
+        "Evangeline Villere",
+        "Mark San Juan",
+        "Denver Villere",
+        "Noli Villere",
+        "Prince Andrei Villere",
+        "Anthony Villere",
+        "Marites Callo",
+        "+ 1 Companion",
+        "Laylani Bautista",
+        "+ 1 Companion"
+    ],
+
+    "Table 3": [
+        "Danilo Enolpe",
+        "Shimer Santos",
+        "Alliah Ballesteros",
+        "Jhydel Faith D. Masing",
+        "Marjeilee Fallorin",
+        "John Lexter Cuadera",
+        "Princess Ashly Cuadera",
+        "Raya Lamberte"
+    ],
+
+    "Table 4": [
+        "Cheska Maguddayao",
+        "Ayesha Lei Arzadon",
+        "Riene Bengaño",
+        "Lila Parada",
+        "Shine Albert",
+        "Queen Recto",
+        "Shane Albert",
+        "Stacy Solace",
+        "Tiffany Abesar",
+        "Aexel Caasi"
+    ],
+
+    "Table 5": [
+        "Kyle Nicholas Sultan",
+        "Rodgie Lyle Margallo",
+        "Joemari Barcela",
+        "Ariana Cruz",
+        "Nick Divinagracia",
+        "Theodore Aplasca",
+        "Czyquia Maerick Edeza",
+        "Will Enzo Lorenzo",
+        "Daimler Francisco",
+        "Maria Ann Jelaine Pacayra"
+    ],
+
+    "Table 6": [
+        "Saggie Casthmhea",
+        "Reese Mozo",
+        "Jaymaureen Mata",
+        "Rhian Ongtangco",
+        "Princess Airish Argente",
+        "Josshelle May Baranda",
+        "Jona Flores",
+        "Christian Mark Llosala",
+        "Eric Gahoy",
+        "Ma. Cristina Culanay"
+    ],
+
+    "Table 7": [
+        "Angelo Ernacio",
+        "Shaine Anne Montes Ernacio",
+        "Cianna Jermaine T. Roldan",
+        "Justin Loresco",
+        "Rafael Loresco",
+  "Charles Cordero",
+        "Lee Rafael Natividad",
+        "Jeffry Abegonia",
+        "Jeffrey Sapinoso",
+        "Jinnes Gamboa"
+    ],
+
+    "Table 8": [
+        "Niome Ballesteros",
+        "Leanne Ballesteros",
+        "Nora Cuadera",
+        "Lorraine Jones V. Cuadera",
+        "Jhylou Masing",
+        "Jhyradel Masing",
+        "Jean",
+        "Dimple",
+        "Nanay Soña",
+        "Erlina Lamberte"
+    ],
+
+    "Table 9": [
+        "Matet Jacky Lou S. Enolpe",
+        "Darah Margarette Enolpe",
+        "Johncel Embao",
+        "+ 1 Companion",
+        "Lariza Villa Villa Santos",
+        "+ 1 Companion",
+        "Juling",
+        "Tita Dyanelle",
+        "+ 1 Companion",
+        "Arleen Anuevo"
+    ]
+};
+
+
+// =====================================
+// SCREEN NAVIGATION
+// =====================================
+
+function showScreen(screenId) {
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
+
+    document.getElementById(screenId).classList.add("active");
+
+    document.getElementById("seatInput").value = "";
+    document.getElementById("tableInput").value = "";
+    document.getElementById("seatResults").innerHTML = "";
+    document.getElementById("tableResults").innerHTML = "";
+}
+
+
+// =====================================
+// NAME MATCHING
+// =====================================
+
+function normalizeName(name) {
+    return name.toLowerCase().trim().replace(/\s+/g, " ");
+}
+
+function matchesName(search, fullName) {
+    const query = normalizeName(search);
+    const name = normalizeName(fullName);
+
+    return name === query || name.split(" ")[0] === query;
+}
+
+
+// =====================================
+// SEAT SEARCH
+// =====================================
+
+function searchSeats() {
+    const search = document.getElementById("seatInput").value.trim();
+    const results = document.getElementById("seatResults");
+
+    results.innerHTML = "";
+
+    if (!search) {
+        results.innerHTML = '<p class="error-message">Please enter your name first.</p>';
+        return;
+    }
+
+    const matchingGroups = reservationGroups.filter(group =>
+        group.names.some(name => matchesName(search, name))
+    );
+
+    if (matchingGroups.length === 0) {
+        results.innerHTML = '<p class="error-message">Sorry, we could not find your reservation. Please check the spelling of your name.</p>';
+        return;
+    }
+
+    matchingGroups.forEach(group => {
+        const companions = group.companions || 0;
+        const totalSeats = group.names.length + companions;
+
+        const listItems = [
+            ...group.names,
+            ...Array.from({ length: companions }, () => "+ 1 Companion")
+        ];
+
+        const matchedName = group.names.find(name => matchesName(search, name));
+
+        results.innerHTML += `
+            <div class="result-card">
+                <div class="result-label">RESERVATION FOUND</div>
+                <div class="result-name">${matchedName}</div>
+
+                <div class="result-label">TOTAL RESERVED SEATS</div>
+                <div class="seat-number">${totalSeats}</div>
+
+                <div class="result-label">YOUR RESERVATION GROUP</div>
+                <ul class="companion-list">
+                    ${listItems.map(name => `<li>${name}</li>`).join("")}
+                </ul>
+            </div>
+        `;
+    });
+}
+
+
+// =====================================
+// TABLE SEARCH
+// =====================================
+
+function searchTable() {
+    const search = document.getElementById("tableInput").value.trim();
+    const results = document.getElementById("tableResults");
+
+    results.innerHTML = "";
+
+    if (!search) {
+        results.innerHTML = '<p class="error-message">Please enter your name first.</p>';
+        return;
+    }
+
+    let foundTable = null;
+    let matchedName = null;
+
+    for (const [tableName, guests] of Object.entries(tables)) {
+        const match = guests.find(name =>
+            !name.toLowerCase().includes("companion") &&
+            matchesName(search, name)
+        );
+
+        if (match) {
+            foundTable = tableName;
+            matchedName = match;
+            break;
+        }
+    }
+
+    if (!foundTable) {
+        results.innerHTML = '<p class="error-message">Sorry, we could not find your table assignment. Please check the spelling of your name.</p>';
+        return;
+    }
+
+    const tablemates = tables[foundTable];
+
+    results.innerHTML = `
+        <div class="result-card">
+            <div class="result-label">YOUR ASSIGNED TABLE</div>
+            <div class="table-number">${foundTable.replace("Table ", "")}</div>
+
+            <div class="result-label">GUEST NAME</div>
+            <div class="result-name">${matchedName}</div>
+
+            <div class="result-label">YOUR TABLEMATES</div>
+            <ul class="companion-list">
+                ${tablemates.map(name => `<li>${name}</li>`).join("")}
+            </ul>
+        </div>
+    `;
+}
+
+</script>
+
+</body>
+</html>
